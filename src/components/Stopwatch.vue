@@ -1,0 +1,715 @@
+<template>
+
+    <div class="stopwatch">
+        <div class="stopwatchsvg">
+         <svg
+         
+  :time-up="timeUp"
+
+  :time-up2="timeUp2"
+      class="stopwatch__svg"
+      viewBox="0 0 100 100"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g class="stopwatch__circle">
+        <circle
+          class="stopwatch__path-elapsed"
+          cx="50"
+          cy="50"
+          r="46.5"
+        />
+          <path
+         
+          class="stopwatch__path-remaining"
+          d="
+            M 50, 50
+            m -45, 0
+            a 45,45 0 1,0 90,0
+            a 45,45 0 1,0 -90,0
+          "></path>
+      </g>
+    </svg>
+    <span class="stopwatch__label">
+      {{ formattedTimeUp }}
+    </span>
+        </div>
+    
+
+
+<div class="stopwatchStart" v-on:click="watchRotate(), startTimer(), startMilliTimer()">
+<h3 class="startTxt">Start</h3>
+</div>
+<div class="lap" v-on:click="lapTimer"><div class="lp">Lap</div></div>
+<div class="stopbtn" v-on:click="stopTimer"><div class="stop">Stop</div></div>
+<div class="rsmbtn"><div class="rsm" v-on:click="rsmTimer">Resume</div></div>
+<div class="cnclbtn" v-on:click="cancelTimer"><div class="cncl">Cancel</div></div>
+<ul class="laps"></ul>
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<div>
+  <h1 class="count">0</h1>
+</div>
+<div>
+</div>
+</div>
+</template>
+
+
+<script>
+import { Draggable } from 'gsap'
+export default {
+    mounted(){
+Draggable.create("#knob", {type: "rotation"});
+
+    },
+  
+data(){
+    return{
+    timeLimit: 0,
+    timePassed: 0,
+    
+}
+},
+
+    computed:{
+     formattedTimeUp(){
+
+
+         const timeUp = this.timeUp
+
+         let minutes = Math.floor(timeUp / 60 / 60)
+
+         if (minutes < 10) {
+       minutes = `0${minutes}`
+     }
+         
+         let seconds = Math.floor(timeUp / 60 % 60)
+         if(seconds < 10){
+             seconds = `0${seconds}`
+         }
+
+         let milli = timeUp % 60
+
+         if(milli < 10){
+             milli = `0${milli}`
+         }
+
+         return `${minutes}:${seconds}:${milli}`
+
+
+         
+     },
+ timeUp() {
+      return this.timeLimit - this.timePassed
+    },
+     
+    },
+     
+    
+
+    
+    
+   
+created(){
+ 
+ 
+},
+  
+   methods:{
+
+       lapTimer(){
+
+            let lapContainer = document.querySelector('.laps')
+        
+            let parent = document.createElement('div');
+            let li = document.createElement('li');
+            let laptext = document.createElement('h2');
+            let lapline = document.createElement('div');
+            laptext.innerHTML = "Lap"
+            let lapNum = document.createElement('h2');
+            let count = document.querySelector(".count")
+            count.innerHTML++;
+
+            li.innerText = this.formattedTimeUp;
+            lapContainer.appendChild(parent);
+            parent.appendChild(li);
+            parent.appendChild(laptext);
+            parent.appendChild(lapline);
+            parent.appendChild(lapNum)
+            parent.style.width = "210px";
+            parent.style.left = "-40px";
+            parent.style.position = "relative";
+            parent.style.background = "none";
+            parent.style.height = "30px";
+            parent.style.top = "-6%"
+            li.style.transform = "translate(-50%, -50%)";
+            li.style.left = "115%";
+           count.style.opacity = "0";
+           
+      
+        
+            
+            lapline.style.top = "35px";
+            lapline.style.position = "absolute";
+            lapline.style.height = "1px"
+            lapline.style.width = "255px"
+            li.style.transform = "translate(-50%, -50%)";
+            lapline.style.left = "8%";
+            lapline.style.background = "rgba(189, 170, 255, 0.5)";
+
+            laptext.style.margin = "none"
+            laptext.style.top = "5px";
+            laptext.style.position = "relative"
+            laptext.style.height = "8px";
+            laptext.style.left = "5%";
+            laptext.style.fontWeight = "normal"
+            laptext.style.listStyleType = "none";
+            laptext.style.fontSize = "17px"
+            laptext.style.fontFamily = "Lato"
+            laptext.style.fontWeight = "500"
+            
+            lapNum.innerHTML = count.innerText; 
+            lapNum.style.margin = "none"
+            lapNum.style.top = "-17px";
+            lapNum.style.position = "relative"
+            lapNum.style.height = "0px";
+            lapNum.style.left = "20.5%";
+            lapNum.style.fontWeight = "normal"
+            lapNum.style.listStyleType = "none";
+            lapNum.style.fontSize = "17px"
+            lapNum.style.fontFamily = "Lato"
+            lapNum.style.fontWeight = "500"
+           
+            li.style.margin = "none"
+            li.style.top = "8px";
+            li.style.position = "relative"
+            li.style.height = "3px";
+            li.style.left = "20px;"
+            li.style.position = "absolute"
+             li.style.listStyleType = "none";
+             li.style.fontSize = "17px"
+             li.style.fontFamily = "Roboto"
+       },
+
+       startTimer(){
+this.timerInterval = setInterval(() => (this.timePassed -=1),
+1000 / 60);
+       },
+  
+       
+       watchRotate(){
+
+            
+                let rotater = document.querySelector('.clock2');
+           let nums = document.querySelector('.nums')
+           let nu = document.querySelectorAll('.nu')
+           let numsChildren = nums.children;
+    
+
+           [nu].forEach.call(nu, function(nu){
+nu.style.setProperty('--transition', '0.0s');
+});
+
+           
+
+           //numsChildren[0].style.setProperty('--background', 'rgb(145, 215, 224)');
+           //numsChildren[1].style.setProperty('--background', 'rgb(126, 196, 228)');
+           //numsChildren[2].style.setProperty('--background', 'rgb(125, 170, 230)');
+           //numsChildren[3].style.setProperty('--background', 'rgb(107, 125, 230)');
+           //numsChildren[4].style.setProperty('--background', 'rgb(123, 99, 228)');
+           //numsChildren[5].style.setProperty('--background', 'rgb(162, 94, 226)');
+           //numsChildren[6].style.setProperty('--background', 'rgb(196, 78, 226)');
+           //numsChildren[7].style.setProperty('--background', 'rgb(216, 72, 230)');
+           //numsChildren[8].style.setProperty('--background', 'rgb(230, 67, 203)');
+           //numsChildren[9].style.setProperty('--background', 'rgb(230, 67, 148)');
+           //numsChildren[10].style.setProperty('--background', 'rgb(230, 67, 102)');
+           //numsChildren[11].style.setProperty('--background', 'rgb(228, 68, 108)');
+           
+           
+           //numsChildren[0].style.setProperty('--transitionDelay', "0.066s");
+           //numsChildren[1].style.setProperty('--transitionDelay', "0.132s");
+           //numsChildren[2].style.setProperty('--transitionDelay', "0.198s");
+           //numsChildren[3].style.setProperty('--transitionDelay', "0.264s");
+           //numsChildren[4].style.setProperty('--transitionDelay', "0.33s");
+           //numsChildren[5].style.setProperty('--transitionDelay', "0.396s");
+           //numsChildren[6].style.setProperty('--transitionDelay', "0.462s");
+           //numsChildren[7].style.setProperty('--transitionDelay', "0.528s");
+           //numsChildren[8].style.setProperty('--transitionDelay', "0.594s");
+           //numsChildren[9].style.setProperty('--transitionDelay', "0.66s");
+           //numsChildren[10].style.setProperty('--transitionDelay', "0.726s");
+           //numsChildren[11].style.setProperty('--transitionDelay', "0.8s");
+
+             numsChildren[0].classList.add('zero0');
+             numsChildren[0].classList.add('zero1');
+             numsChildren[1].classList.add('one0');
+             numsChildren[1].classList.add('one1');
+             numsChildren[2].classList.add('two0');
+             numsChildren[2].classList.add('two1');
+             numsChildren[3].classList.add('three0');
+             numsChildren[3].classList.add('three1');
+              numsChildren[4].classList.add('four0');
+             numsChildren[4].classList.add('four1');
+             numsChildren[5].classList.add('five0');
+             numsChildren[5].classList.add('five1');
+             numsChildren[6].classList.add('six0');
+             numsChildren[6].classList.add('six1');
+             numsChildren[7].classList.add('seven0');
+             numsChildren[7].classList.add('seven1');
+             numsChildren[8].classList.add('eight0');
+             numsChildren[8].classList.add('eight1');
+             numsChildren[9].classList.add('nine0');
+             numsChildren[9].classList.add('nine1');
+             numsChildren[10].classList.add('ten1');
+             numsChildren[11].classList.add('eleven0');
+             numsChildren[11].classList.add('eleven1');
+             
+            rotater.classList.add('animated');
+
+
+let nu0 = document.querySelectorAll('.nu.zero1, .nu.one1, .nu.two1, .nu.three1, .nu.four1, .nu.five1, .nu.six1, .nu.seven1, .nu.eight1, .nu.nine1, .nu.ten1, .nu.eleven1');
+            [nu0].forEach.call(nu0, function(nu0){
+nu0.style.setProperty('--animationPlay', 'running');
+});
+
+            rotater.style.animationPlayState = "running";
+           
+           
+           const start = document.querySelector(".stopwatchStart")
+           const rsm = document.querySelector('.rsmbtn')
+           const lap = document.querySelector('.lap')
+const stop = document.querySelector('.stopbtn')
+const cncl = document.querySelector('.cnclbtn')
+
+           start.style.visibility = "hidden";
+           start.style.transitionDelay = "0s"
+           lap.style.visibility = "visible";
+           lap.style.opacity = "1";
+           lap.style.left = "72%";
+           lap.style.transition = "0.2s";
+           stop.style.visibility = "visible";
+           stop.style.opacity = "1";
+           stop.style.left = "28%";
+           stop.style.transition = "0.2s";
+           cncl.style.left = "72%";
+           cncl.style.transition = "0s";
+           rsm.style.left = "72%";
+           rsm.style.transition = "0s"
+           
+           
+           
+       },
+
+
+
+       stopTimer(){
+
+
+
+
+clearInterval(this.timerInterval);
+let rotater = document.querySelector('.clock2');
+ let nu0 = document.querySelectorAll('.nu.zero1, .nu.one1, .nu.two1, .nu.three1, .nu.four1, .nu.five1, .nu.six1, .nu.seven1, .nu.eight1, .nu.nine1, .nu.ten1, .nu.eleven1');
+let rsm = document.querySelector(".rsmbtn");
+let stop = document.querySelector(".stopbtn");
+let cncl = document.querySelector('.cnclbtn')
+let lap = document.querySelector('.lap');
+
+
+[nu0].forEach.call(nu0, function(nu0){
+nu0.style.setProperty('--animationPlay', 'paused');
+});
+
+            rotater.style.animationPlayState = "paused";
+
+            
+            rsm.style.visibility = "visible";
+            rsm.style.opacity = "1"
+            rsm.style.left = "28%"
+            rsm.style.transition = "0s";
+
+            stop.style.visibility = "hidden";
+            stop.style.opacity = "0"
+            stop.style.left = "50%"
+
+            stop.style.transition = "0s";
+
+           cncl.style.transition = "0s";
+           cncl.style.visibility = "visible";
+           cncl.style.opacity = "1";
+           lap.style.visibility = "hidden";
+           lap.style.transition = "0s";
+           
+       },
+       rsmTimer(){
+
+this.timerInterval = setInterval(() => (this.timePassed -=1),
+1000 / 60);
+
+
+
+let rotater = document.querySelector('.clock2');
+ let nu0 = document.querySelectorAll('.nu.zero1, .nu.one1, .nu.two1, .nu.three1, .nu.four1, .nu.five1, .nu.six1, .nu.seven1, .nu.eight1, .nu.nine1, .nu.ten1, .nu.eleven1');
+let rsm = document.querySelector(".rsmbtn");
+let stop = document.querySelector(".stopbtn");
+let cncl = document.querySelector('.cnclbtn')
+let lap = document.querySelector('.lap');
+
+[nu0].forEach.call(nu0, function(nu0){
+nu0.style.setProperty('--animationPlay', 'running');
+});
+
+            rotater.style.animationPlayState = "running";
+
+            
+            rsm.style.visibility = "hidden";
+            rsm.style.opacity = "0"
+            rsm.style.left = "50%"
+            
+
+            stop.style.visibility = "visible";
+            stop.style.opacity = "1"
+            stop.style.left = "28%"
+            rsm.style.transition = "0s";
+            stop.style.transition = "0s";
+
+            lap.style.transition = "0s";
+lap.style.visibility = "visible";
+           lap.style.opacity = "1";
+           cncl.style.visibility = "hidden";
+           cncl.style.transition = "0s";
+           
+       },
+       cancelTimer(){
+           let lapContainer = document.querySelector('.laps')
+           let count = document.querySelector(".count")
+           let nums = document.querySelector('.nums')
+           let numsChildren = nums.children;
+           let rotater = document.querySelector('.clock2');
+    const start = document.querySelector(".stopwatchStart")
+           const lap = document.querySelector('.lap')
+const stop = document.querySelector('.stopbtn')
+const cncl = document.querySelector('.cnclbtn')
+const rsm = document.querySelector('.rsmbtn');
+
+start.style.visibility = "visible";
+start.style.opacity = "1";
+start.style.transitionDelay = "0.2s"
+lap.style.visibility = "hidden";
+lap.style.opacity = 0;
+lap.style.transition = "0.2s"
+lap.style.left = "50%";
+stop.style.visibility = "hidden";
+stop.style.opacity = 0;
+stop.style.transition = "0.2s"
+stop.style.left = "50%";
+cncl.style.visibility = "hidden";
+cncl.style.opacity = 0;
+cncl.style.transition = "0.2s"
+cncl.style.left = "50%";
+rsm.style.visibility = "hidden";
+rsm.style.opacity = 0;
+rsm.style.transition = "0.2s"
+rsm.style.left = "50%";
+
+        clearInterval(this.timerInterval);
+        this.timeLimit = 0;
+        this.timePassed = 0;
+           numsChildren[0].classList.remove('zero0');
+             numsChildren[0].classList.remove('zero1');
+             numsChildren[1].classList.remove('one0');
+             numsChildren[1].classList.remove('one1');
+             numsChildren[2].classList.remove('two0');
+             numsChildren[2].classList.remove('two1');
+             numsChildren[3].classList.remove('three0');
+             numsChildren[3].classList.remove('three1');
+              numsChildren[4].classList.remove('four0');
+             numsChildren[4].classList.remove('four1');
+             numsChildren[5].classList.remove('five0');
+             numsChildren[5].classList.remove('five1');
+             numsChildren[6].classList.remove('six0');
+             numsChildren[6].classList.remove('six1');
+             numsChildren[7].classList.remove('seven0');
+             numsChildren[7].classList.remove('seven1');
+             numsChildren[8].classList.remove('eight0');
+             numsChildren[8].classList.remove('eight1');
+             numsChildren[9].classList.remove('nine0');
+             numsChildren[9].classList.remove('nine1');
+             numsChildren[10].classList.remove('ten1');
+             numsChildren[11].classList.remove('eleven0');
+             numsChildren[11].classList.remove('eleven1');
+             
+            rotater.classList.remove('animated');
+
+            lapContainer.innerHTML = '';
+            count.innerHTML = "0";
+        
+       }
+   } 
+   
+}
+</script>
+
+
+<style scoped>
+
+.stopwatchsvg {
+  position: relative;
+  width: 218px;
+  height: 218px;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: black;
+  z-index: +10;
+  visibility: visible;
+}
+
+.stopwatch__circle {
+    fill: none;
+    stroke: none;
+    font-size: 48px;
+     visibility: visible;
+     position: absolute;
+      top: 150%;
+  }
+
+  .stopwatch__path-elapsed{
+    stroke-width: 7px;
+    stroke:grey;
+    opacity: 0;
+    font-size: 48px;
+    position: absolute;
+    top: 150%;
+      visibility: visible;
+  }
+
+  .stopwatch__path-remaining{
+    stroke-width: 2px;
+    stroke-linecap: square;
+    transform: rotate(90deg);
+    transform-origin: center;
+    transition: 1s linear all;
+    stroke:  rgb(135, 102, 252); 
+
+   font-size: 48px;
+    visibility: hidden;
+     position: absolute;
+      top: 103.2%;
+
+  }
+
+  .stopwatch__svg{
+    transform: scaleX(-1);
+    font-size: 48px;
+    visibility: visible;
+     position: absolute;
+      top: 17.5%;
+      color: black;
+
+  }
+
+.stopwatch__label{
+  position: relative;
+top: 53%;
+  left: 12.5%;
+  transform: translate(-50%, -50%);
+font-family: 'Rubik', sans-serif;
+   font-size: 38px;
+     color: rgb(77, 77, 77);
+     opacity: 1;
+    visibility: hidden;
+    z-index: +40;
+    
+}
+
+.stopwatch__label2{
+  position: absolute;
+top: 66.5%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+font-family: 'Rubik', sans-serif;
+   font-size: 42px;
+     color: rgb(77, 77, 77);
+     opacity: 1;
+    visibility: visible;
+    z-index: +40;
+    
+}
+
+.stopwatchStart{
+   height: 55px;
+  width: 118px;
+  border-radius: 500px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  /*top: 85%;*/
+  top: 85%;
+  left: 50%;
+  background-color: rgb(131, 99, 245); 
+  box-shadow:  1px 2px 8px 0px rgb(152, 163, 187);
+  visibility: hidden;
+  opacity: 1;
+}
+
+.startTxt{
+  margin: 0;
+position: absolute;
+    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+ font-family: 'Roboto', sans-serif;
+ color: white;
+ font-weight: 400;
+ font-size: 20px;
+ letter-spacing: 1px;
+}
+
+.laps{
+    width: 250px;
+    height:  165px;
+    position: absolute;
+    font-size: 12px;
+    color: black;
+    /*background: rgb(234, 242, 243);*/
+left: 50%;
+transform: translate(-50%, -50%);
+top: 66%;
+z-index: -1;
+overflow: hidden;
+overflow-y: scroll;
+background: none;
+}
+
+.stopbtn{
+left: 50%;
+    height: 55px;
+  width: 118px;
+  border-radius: 500px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  /*top: 85%;*/
+  top: 85%;
+  visibility: hidden;
+  background-color: rgb(131, 99, 245); 
+  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+  opacity: 0;
+}
+
+.stop{
+    margin: 0;
+position: absolute;
+    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+ font-family: 'Roboto', sans-serif;
+ color: white;
+ font-weight: 400;
+ font-size: 20px;
+ letter-spacing: 1px;
+}
+
+.rsmbtn{
+left: 50%;
+    height: 55px;
+  width: 118px;
+  border-radius: 500px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  /*top: 85%;*/
+  top: 85%;
+  visibility: hidden;
+  background-color: rgb(131, 99, 245); 
+  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+  opacity: 0;
+}
+
+.rsm{
+    margin: 0;
+position: absolute;
+    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+ font-family: 'Roboto', sans-serif;
+ color: white;
+ font-weight: 400;
+ font-size: 20px;
+ letter-spacing: 1px;
+}
+
+
+
+
+.lp{
+    margin: 0;
+position: absolute;
+    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+ font-family: 'Roboto', sans-serif;
+ color: white;
+ font-weight: 400;
+ font-size: 20px;
+ letter-spacing: 1px;
+}
+
+.lap{
+
+    left: 50%;
+    height: 55px;
+  width: 118px;
+  border-radius: 500px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  /*top: 85%;*/
+  top: 85%;
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.712); 
+  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+  opacity: 0;
+
+}
+
+.cnclbtn{
+
+     height: 55px;
+  width: 118px;
+  border-radius: 500px;
+   position: absolute;
+    transform: translate(-50%, -50%);
+    top: 85%;
+  left: 50%;
+  background-color: rgba(255, 0, 0, 0.541); 
+  box-shadow:  1px 2px 4px 0px rgb(187, 127, 127);
+  visibility: hidden;
+  opacity: 0;
+
+}
+
+.cncl{
+    margin: 0;
+position: absolute;
+    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+ font-family: 'Roboto', sans-serif;
+ color: white;
+ font-weight: 400;
+ font-size: 20px;
+ letter-spacing: 1px;
+}
+
+
+
+
+.count{
+    opacity: 0;
+}
+
+
+
+ 
+
+</style>

@@ -52,7 +52,7 @@
 
 
 
- 
+
  
  
 
@@ -74,6 +74,12 @@
         <div class="min">
           <div class="mn" id="mn"></div>
         </div>
+        <div class="hour2">
+          <div class="hr2" id="hr2"></div>
+        </div>
+        <div class="min2">
+          <div class="mn2" id="mn2"></div>
+        </div>
         <div class="sec">
         <div class="sc" id="sc"></div>
         </div>
@@ -81,7 +87,7 @@
       <div class="name">
       <div class="city">Brighton</div>
       <div class="country">United Kingdom</div>
-      <div class="time">15:00</div>
+      <div class="time">17:15</div>
     </div>
 
     <div class="switch">
@@ -96,7 +102,7 @@
 
    
 <Stopwatch/>
-
+<Alarm/>
 
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -106,10 +112,19 @@
   </div>
 </div>
 </div>
-<div class="savedclock">
-  <div class="plus">+</div>
+<div class="savedclock" v-on:click="Search()">
+  <div class="searchbtn"><ion-icon name="add-outline"></ion-icon></div>
 </div>
-<Alarm/>
+
+<input type="text" 
+  class="search-bar" 
+  placeholder="Search..."
+  v-model="query"
+  @keydown.enter="fetchTime(), changeTime()"
+  /> 
+
+  <div class="cityname"></div>
+
 </div>
 
 </template>
@@ -143,15 +158,102 @@ name: 'Clock',
 
 
 created(){
-  this.interval = setInterval(() => this.ClockWork(), 1000);
+ 
+
+ 
+},
+
+data(){
+return{
+
+      query: '',
+    loaded: false
+}
 },
   
+  mounted(){
+//this.interval = setInterval(() => this.ClockWork(), 1000);
+  },
 
 
 
   
   methods:{
+
+
+    fetchTime () {
+fetch(`http://api.timezonedb.com/v2.1/get-time-zone?key=WPNJI5WCV526&format=json&by=zone&zone=${this.query}`)
+.then(res => res.json())
+.then(function(data){
+  console.log(data)
+ 
+
+ let countryname = document.querySelector(".country");
+let timename = document.querySelector(".time")
+let timestamp = data.timestamp
+let country = data.countryName
+  const deg = 6;
+  const hr = document.querySelector("#hr");
+  const mn = document.querySelector("#mn");
+  //const sc = document.querySelector('#sc')
+var date = new Date(timestamp * 1000);
+var hours = date.getHours() - 1;
+// Minutes part from the timestamp
+var minutes = "0" + date.getMinutes();
+// Seconds part from the timestamp
+//var seconds = "0" + date.getSeconds();
+
+// Will display time in 10:30:23 format
+var formattedTime = hours + ':' + minutes.substr(-2)
+
+let hh = hours * 30;
+    let mm = date.getMinutes() * deg;
+    //let ss = date.getSeconds() * deg;
+
+hr.style.transform = `rotateZ(${(hh)+(mm/12)}deg)`;
+mn.style.transform = `rotateZ(${mm}deg)`;
+timename.innerHTML = formattedTime
+countryname.innerHTML = country
+ 
+
+})
+
+  },
     
+    Search(){
+let clockui = document.querySelector('.clockui')
+let clockuiChildren = clockui.children;
+let country = document.querySelector(".country")
+let city = document.querySelector(".city")
+let time = document.querySelector(".time")
+let menu = document.querySelector(".menu");
+let searchBar = document.querySelector(".search-bar");
+let searchBtn = document.querySelector(".savedclock");
+clockuiChildren[2].style.top = "-40%";
+clockuiChildren[3].style.top = "-40%";
+menu.style.top = "-30%";
+
+searchBtn.style.top = "120%";
+searchBar.style.top = "7%";
+searchBar.style.visibility = "visible";
+searchBar.style.opacity = "1";
+country.style.top = "-30%";
+city.style.top = "-30%";
+time.style.top = "-30%";
+
+clockuiChildren[2].style.transition = "0.4s";
+clockuiChildren[3].style.transition = "0.4s";
+country.style.transition = "0.4s";
+city.style.transition = "0.4s";
+time.style.transition = "0.4s";
+menu.style.transition = "0.4s";
+searchBar.style.transition = "0.4s";
+searchBtn.style.transition = "0.4s";
+
+
+
+    },
+
 
 ClockWork(){
   const deg = 6;
@@ -170,10 +272,41 @@ ClockWork(){
 
 
 },
+changeTime(){
+  this.interval = setInterval(() => this.fetchTime(), 60000);
+  this.interval = clearInterval(() => this.ClockWork(), 1000);
 
+  let clockui = document.querySelector('.clockui')
+let clockuiChildren = clockui.children;
+let country = document.querySelector(".country")
+let city = document.querySelector(".city")
+let time = document.querySelector(".time")
+let menu = document.querySelector(".menu");
+let searchBar = document.querySelector(".search-bar");
+let searchBtn = document.querySelector(".savedclock");
+clockuiChildren[2].style.top = "31%";
+clockuiChildren[3].style.top = "31%";
+menu.style.top = "5%";
 
+searchBtn.style.top = "85%";
+searchBar.style.top = "50%";
+searchBar.style.visibility = "hidden";
+searchBar.style.opacity = "0";
+country.style.top = "58%";
+city.style.top = "54%";
+time.style.top = "62.5%";
 
-  },
+clockuiChildren[2].style.transition = "0.4s";
+clockuiChildren[3].style.transition = "0.4s";
+country.style.transition = "0.4s";
+city.style.transition = "0.4s";
+time.style.transition = "0.4s";
+menu.style.transition = "0.4s";
+searchBar.style.transition = "0.4s";
+searchBtn.style.transition = "0.4s";
+}
+
+  }
   
 
 
@@ -182,6 +315,9 @@ ClockWork(){
 
 
 <style scoped>
+
+
+
 
 .clockcontain{
   top: 50%;
@@ -204,7 +340,9 @@ overflow: hidden;
   background-color: rgb(241, 248, 255);
   transform: translate(-50%, -50%);
   position: absolute;
+z-index: +1;
 }
+
 
 
 .clock{
@@ -225,9 +363,54 @@ overflow: hidden;
 
   }
   
+.search-bar{
+  position: absolute;
+  display: block;
+  width: 80%;
+  height: 36px;
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform:translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  z-index: +30;
+  color: #ffffff;
+  font-size: 20px;
+  appearance: none;
+  outline: none;
+box-shadow:  -7px 7px 10px 3px rgba(109, 165, 224, 0.171),
+   0px 1px 10px 1px rgba(157, 204, 255, 0.11);
+  background: none;
+border: none;
+border-radius: 5px;
+background: rgb(234,244,255);
+background: linear-gradient(330deg, rgba(234,244,255,1) 0%, rgba(215,235,255,1) 100%);
+  transition: 0.4s;
+  box-shadow: 0px, 0px, 0px, 16px rgba(0, 0, 0, 0.25);
+}
+
+.search-bar::placeholder{
+  color: rgb(255, 255, 255);
+  opacity: 1;
+  font-size: 15px;
+}
+
+.search-bar:focus{
+  top: 50px;
+  margin-top: 25px;
+
+}
+
+  
+  
+  
+  
+
+
 
   .clock2{
-  top: 26.6%;
+  top: 21.6%;
   position: absolute;
   left: 29.9%;
  
@@ -244,7 +427,7 @@ overflow: hidden;
 
   }
 
-  
+
 
   .animated{
     animation: rotae 1s infinite;
@@ -252,11 +435,10 @@ animation-delay: 0.1s;
   }
 
 
-
 @keyframes zero1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -264,16 +446,16 @@ from{
 
 @keyframes one1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
 
 @keyframes two1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -281,8 +463,8 @@ from{
 
 @keyframes three1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -290,8 +472,8 @@ from{
 
 @keyframes four1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -299,8 +481,8 @@ from{
 
 @keyframes five1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -308,8 +490,8 @@ from{
 
 @keyframes six1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -317,8 +499,8 @@ from{
 
 @keyframes seven1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
@@ -326,35 +508,36 @@ from{
 
 @keyframes eight1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
 
 @keyframes nine1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
 
 @keyframes ten1{
 from{
-    background: rgb(171, 106, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
 
 @keyframes eleven1{
 from{
-    background: rgb(172, 116, 255);
-     box-shadow:  1px 2px 8px 0px rgba(171, 106, 255, 0.486);
+    background: rgb(55, 153, 252);
+     box-shadow:  1px 2px 8px 0px rgba(55, 153, 252, 0.486);
   }
 }
 
+ 
  
 
 .nu.zero1:after{
@@ -472,14 +655,14 @@ from{
     content: '';
 width: 8px;
 height: 8px;
-background-color: rgb(135, 102, 252);
+background-color: rgb(252, 102, 102);
 position: absolute;
 left: 50%;
 top: 50%;
 border-radius: 50px;
 z-index: 20;
 transform:translate(-50%, -50%);
-
+visibility: hidden;
 
   }
 
@@ -487,14 +670,14 @@ transform:translate(-50%, -50%);
     content: '';
 width: 12px;
 height: 12px;
-background-color: rgb(192, 208, 209);
+background-color: rgb(197, 217, 238);
 position: absolute;
 left: 50%;
 top: -15%;
 border-radius: 50px;
 z-index: +30;
 transform:translate(-50%, -50%);
-
+visibility: hidden;
 
   }
   
@@ -562,7 +745,7 @@ transform:translate(-50%, -50%);
     .sec, .sc{
     width: 230px;
     height: 226px;
-    
+    visibility: hidden;
   }
   .hr, .mn, .sc{
     display: flex;
@@ -604,13 +787,72 @@ transform:translate(-50%, -50%);
     width: 2px;
     height: 127px;
     z-index: 12;
-    background-color: rgb(135, 102, 252);
+    background-color: rgb(252, 102, 102);
 
 
 
 
   }
 
+.hour2,
+  .min2{
+    position: absolute;
+ 
+  }
+
+  .hour2, .hr2{
+    width: 160px;
+    height: 95px;
+    
+
+  }
+
+   .min2, .mn2{
+    width: 190px;
+    height: 198px;
+  }
+
+    .sec2, .sc2{
+    width: 230px;
+    height: 226px;
+    
+  }
+  .hr2, .mn2{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;;
+    visibility: hidden;
+    transition: all 0.3s ease-in;
+  }
+  .hr2::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 0px;
+  
+    z-index: 10;
+ 
+           border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+    
+  border-bottom: 84px solid rgb(93, 89, 105);
+  }
+  .mn2::before{
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 0px;
+
+    z-index: 10;
+       border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+
+  border-bottom: 110px solid rgb(205, 223, 242);
+  }
 
  
 
@@ -622,6 +864,20 @@ transform:translate(-50%, -50%);
         font-family: 'Open Sans', sans-serif;
         font-size: 18px;
         color: rgb(151, 164, 165);
+  }
+
+  .cityname{
+    left: 50%;
+    top: 62.5%;
+    position: absolute;
+        transform: translate(-50%, -50%);
+                font-family: 'Open Sans', sans-serif;
+                font-weight: 400;
+                font-size: 24px;
+                white-space: nowrap;
+                color: rgb(58, 73, 77);
+                font-weight: 600;
+                z-index: +30;
   }
 
    .country{
@@ -655,26 +911,30 @@ transform:translate(-50%, -50%);
 
 
 .savedclock{
-  height: 60px;
-  width: 60px;
-  position: absolute;
-  top: 87%;
-left: 50%;
-border-radius: 50%;
-box-shadow: 0px 1px 7px 5px rgb(221, 238, 255);
-transform: translate(-50%, -50%);
-  background: rgb(247, 251, 255)
+   height: 70px;
+  width: 70px;
+  border-radius: 500px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+  top: 85%;
+  left: 50%;
+  z-index: 10;
+    background: #93c4ff;
+  box-shadow:  0px 0px 30px 2px #83b4f5;
+  opacity: 1;
 }
 
-.plus{
+.searchbtn{
 
+z-index: +40;
   position: absolute;
-  top: 46%;
+  top: 56%;
 left: 50%;
 transform: translate(-50%, -50%);
 font-family: 'Lato';
-color: rgba(55, 153, 252, 0.7);
-font-size: 65px;
+color: rgb(255, 255, 255);
+font-size: 35px;
 font-weight: 300;
 
 }
@@ -706,7 +966,7 @@ opacity: 0.7;
 animation-play-state: paused;
 }
 
-.
+
 
 /*rgb(192, 208, 209)*/
 
@@ -725,7 +985,7 @@ animation-play-state: paused;
 .nu:after{
 content: '';
 position: absolute;
-top: 0;
+top: -5%;
 left: 50%;
 transform: translateX(-50%);
 width: 3px;

@@ -37,14 +37,14 @@
 
 
 <div class="stopwatchStart" v-on:click="watchRotate(), startTimer(), startMilliTimer()">
-<h3 class="startTxt">Start</h3>
+<h3 class="startTxt"><ion-icon name="play-sharp"></ion-icon></h3>
 </div>
-<div class="lap" v-on:click="lapTimer"><div class="lp">Lap</div></div>
-<div class="stopbtn" v-on:click="stopTimer"><div class="stop">Stop</div></div>
-<div class="rsmbtn"><div class="rsm" v-on:click="rsmTimer">Resume</div></div>
-<div class="cnclbtn" v-on:click="cancelTimer"><div class="cncl">Cancel</div></div>
-<ul class="laps"></ul>
-
+<div class="lap" v-on:click="lapTimer"><div class="lp"><ion-icon name="flag-sharp"></ion-icon></div></div>
+<div class="buttoncontainer2">
+<div class="stopbtn" v-on:click="stopTimer"><div class="stop"><ion-icon name="pause-sharp"></ion-icon></div></div>
+<div class="rsmbtn"><div class="rsm" v-on:click="rsmTimer"><ion-icon name="play-sharp"></ion-icon></div></div>
+<div class="cnclbtn" v-on:click="cancelTimer"><div class="cncl"><ion-icon name="close-sharp"></ion-icon></div></div>
+</div>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -53,6 +53,7 @@
 </div>
 <div>
 </div>
+<ul class="laps"></ul>
 </div>
 </template>
 
@@ -196,6 +197,8 @@ created(){
        startTimer(){
 this.timerInterval = setInterval(() => (this.timePassed -=1),
 1000 / 60);
+const start = document.querySelector(".stopwatchStart")
+start.style.transition = "0s";
        },
   
        
@@ -455,11 +458,11 @@ rsm.style.left = "50%";
 <style scoped>
 
 .stopwatchsvg {
-  position: relative;
+  position: absolute;
   width: 218px;
   height: 218px;
   left: 50%;
-  top: 40%;
+  top: 31%;
   transform: translate(-50%, -50%);
   font-size: 48px;
   color: black;
@@ -513,7 +516,7 @@ rsm.style.left = "50%";
 
 .stopwatch__label{
   position: relative;
-top: 53%;
+top: 36%;
   left: 12.5%;
   transform: translate(-50%, -50%);
 font-family: 'Rubik', sans-serif;
@@ -540,32 +543,35 @@ font-family: 'Rubik', sans-serif;
 }
 
 .stopwatchStart{
-   height: 55px;
-  width: 118px;
+   height: 75px;
+  width: 75px;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
   /*top: 85%;*/
-  top: 85%;
+  top: 110%;
   left: 50%;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(152, 163, 187);
-  visibility: hidden;
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.582);
   opacity: 1;
 }
+
+
 
 .startTxt{
   margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  top: 54%;
+  left: 54%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 25px;
  letter-spacing: 1px;
 }
+
+
 
 .laps{
     width: 250px;
@@ -576,25 +582,26 @@ position: absolute;
     /*background: rgb(234, 242, 243);*/
 left: 50%;
 transform: translate(-50%, -50%);
-top: 66%;
-z-index: -1;
-overflow: hidden;
-overflow-y: scroll;
+top: 63%;
+overflow: scroll;
+z-index: +50;
 background: none;
 }
 
+
+
 .stopbtn{
 left: 50%;
-    height: 55px;
-  width: 118px;
+    height: 70px;
+  width: 70px;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
   /*top: 85%;*/
   top: 85%;
   visibility: hidden;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.568);
   opacity: 0;
 }
 
@@ -602,27 +609,27 @@ left: 50%;
     margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
+  top: 55%;
   left: 50%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 30px;
  letter-spacing: 1px;
 }
 
 .rsmbtn{
 left: 50%;
-    height: 55px;
-  width: 118px;
+    height: 70px;
+  width: 70px;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
   /*top: 85%;*/
   top: 85%;
   visibility: hidden;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.589);
   opacity: 0;
 }
 
@@ -630,12 +637,12 @@ left: 50%;
     margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  top: 54%;
+  left: 53%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 25px;
  letter-spacing: 1px;
 }
 
@@ -646,20 +653,20 @@ position: absolute;
     margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
+  top: 54%;
   left: 50%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 22px;
  letter-spacing: 1px;
 }
 
 .lap{
 
     left: 50%;
-    height: 55px;
-  width: 118px;
+    height: 70px;
+  width: 70px;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
@@ -667,22 +674,24 @@ position: absolute;
   top: 85%;
   visibility: hidden;
   background-color: rgba(0, 0, 0, 0.712); 
-  box-shadow:  1px 2px 8px 0px rgb(170, 170, 170);
+  box-shadow:  0px 0px 8px 0px rgb(170, 170, 170);
   opacity: 0;
 
 }
 
+
+
 .cnclbtn{
 
-     height: 55px;
-  width: 118px;
+     height: 70px;
+  width: 70px;
   border-radius: 500px;
    position: absolute;
     transform: translate(-50%, -50%);
     top: 85%;
   left: 50%;
   background-color: rgba(255, 0, 0, 0.541); 
-  box-shadow:  1px 2px 4px 0px rgb(187, 127, 127);
+  box-shadow:  0px 0px 4px 0px rgb(187, 127, 127);
   visibility: hidden;
   opacity: 0;
 
@@ -692,12 +701,12 @@ position: absolute;
     margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
+  top: 56%;
   left: 50%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 30px;
  letter-spacing: 1px;
 }
 

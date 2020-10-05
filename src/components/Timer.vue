@@ -1,10 +1,10 @@
 <template>
 <div class="timerbase">
-    <div class="base-timer">
+    <div class="base-timer" value="1">
   <svg
   :time-left="timeLeft"
       class="base-timer__svg"
-      viewBox="0 0 100 100"
+      viewBox="0 0 120 120"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g class="base-timer__circle">
@@ -17,7 +17,7 @@
           <path
           :time-left="timeLeft"
           :stroke-dasharray="circleDasharray"
-          class="base-timer__path-remaining"
+          class="base-timer__path-remaining" 
           d="
             M 50, 50
             m -45, 0
@@ -34,22 +34,30 @@
 
 
    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
-   <div class="inputbox">
+  
 <input type="number"  maxlength = "2" id="myNumber"  class="timerNum" value="00"   v-on:change="leadingZeros(this); " v-on:click="leadingZeros(this)" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 <input type="number"  maxlength = "2" id="myNumber"  class="timerNum4" value="00"   v-on:change="leadingZeros(this); " v-on:click="leadingZeros(this)" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
 <input type="number"  maxlength = "2" id="myNumber"  class="timerNum3" value="00"   v-on:change="leadingZeros(this); " v-on:click="leadingZeros(this)" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-</div>
+
+<div class="buttoncontainer">
 <div class="startbtn"  v-on:click="timelimitt()">
-  <h3 class="start">Start</h3>
+  <h3 class="start"><ion-icon name="play-sharp"></ion-icon></h3>
 </div>
 <div class="pausebtn" v-on:click="pause()">
-  <h3 class="start">Pause</h3>
+  <h3 class="pause"><ion-icon name="pause-sharp"></ion-icon></h3>
 </div>
 <div class="resumebtn" v-on:click="resume()">
-  <h3 class="start">Resume</h3>
+  <h3 class="resume"><ion-icon name="play-sharp"></ion-icon></h3>
 </div>
 <div class="cancelbtn" v-on:click="cancel()">
-  <h3 class="start">Cancel</h3>
+  <h3 class="cancel"><ion-icon name="close-sharp"></ion-icon></h3>
+</div>
+</div>
+<div class="timerBase">
+  <div class="timercirchand"></div>
+  <div class="timercirc1"></div>
+  <div class="timercirc2"></div>
+  <div class="timercirc3"></div>
 </div>
 </div>
 </template>
@@ -64,6 +72,7 @@ export default {
   mounted(){
 this.startTimer();
 this.zero();
+
 },
 
 watch: {
@@ -136,6 +145,8 @@ components: {
 
   methods:{
 cancel(){
+  let clockui = document.querySelector('.clockui')
+let clockuiChildren = clockui.children;
 let baseCircle = document.querySelector(".base-timer__path-remaining");
       let timerNum = document.querySelector(".timerNum").value;
         let timerNum4 = document.querySelector(".timerNum4").value;
@@ -169,9 +180,9 @@ startbtn.style.transition = "0.3s ease"
 
 baseCircle.style.visibility = "hidden"
 baseCircle.style.transition = "0s";
-
-let clockui = document.querySelector('.clockui')
-let clockuiChildren = clockui.children;
+baseLabel.style.transition = "0s";
+const timerCirc1 = document.querySelector(".timercirc1");
+const timerCirc2 = document.querySelector(".timercirc2");
 
 let second = document.querySelector('.sec');
 second.style.opacity = "0"
@@ -189,18 +200,18 @@ let clockmincirc = document.querySelector(".clockmincirc")
 clockmincirc.style.opacity = "0";
 clockmincirc.style.transition = "0.1s ease"
 
-clockuiChildren[3].style.width = "180px"
-clockuiChildren[3].style.height = "180px"
-clockuiChildren[3].style.boxShadow = "0px 0px 30px 10px rgba(181, 230, 250, 0.2)"
-clockuiChildren[2].style.width = "290px"
-clockuiChildren[2].style.height = "290px"
-clockuiChildren[2].style.boxShadow = "inset 0px 0px 20px 10px rgba(187, 226, 241, 0.3)"
+timerCirc1.style.width = "235px"
+timerCirc1.style.height = "235px"
+timerCirc1.style.boxShadow = "0px 0px 5px 1px rgb(158, 219, 255)"
+timerCirc2.style.width = "275px"
+timerCirc2.style.height = "275px"
+timerCirc2.style.boxShadow = "inset 0px 0px 60px 35px rgba(187, 226, 241, 0.3), 0px 0px 5px 0px rgb(158, 219, 255)"
 
-clockuiChildren[3].style.transition = "0.4s ease"
-clockuiChildren[2].style.transition = "0.4s ease"
+timerCirc1.style.transition = "0.4s ease"
+timerCirc2.style.transition = "0.4s ease"
 
-clockuiChildren[3].style.top = "40%"
-clockuiChildren[2].style.top = "40%"
+timerCirc1.style.top = "40%"
+timerCirc2.style.top = "40%"
 clockuiChildren[5].style.top = "40%"
 
 baseLabel.style.visibility = "hidden";
@@ -273,8 +284,9 @@ clearInterval(this.timerInterval);
               let baseCircle = document.querySelector(".base-timer__path-remaining");
               let baseLabel = document.querySelector(".base-timer__label")
       if(this.timeLeft == 0){
-        let clockui = document.querySelector('.clockui')
-let clockuiChildren = clockui.children;
+        
+const timerCirc1 = document.querySelector(".timercirc1");
+const timerCirc2 = document.querySelector(".timercirc2");
         let timerNum = document.querySelector(".timerNum").value;
         let timerNum4 = document.querySelector(".timerNum4").value;
         let timerNum44 = document.querySelector(".timerNum4")
@@ -289,19 +301,24 @@ timerNum33.style.visibility = "hidden"
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000);
       timer.style.visibility = "visible";
 baseCircle.style.visibility = "visible"
+baseCircle.value = 1
 baseLabel.style.visibility = "visible"
 timerNu.style.visibility = "hidden"
-clockuiChildren[3].style.height = "237px"
-clockuiChildren[3].style.width = "237px"
+timerCirc1.style.height = "250px"
+timerCirc1.style.width = "250px"
+timerCirc2.style.height = "296px"
+timerCirc2.style.width = "296px"
 timer.style.height = "315px"
 timer.style.width = "315px"
 timer.style.strokeDasharray = null;
-baseCircle.style.stroke = "rgb(135, 102, 252)"
+baseCircle.style.stroke = "rgb(69, 156, 255)"
 pausebtn.style.left = "28%";
 cancelbtn.style.left ="72%";
 pausebtn.style.visibility = "visible"
 pausebtn.style.opacity = "1";
 cancelbtn.style.visibility = "visible"
+baseCircle.style.transition = "0s"
+baseLabel.style.transition = "0s"
 baseCircle.style.transition = "1s linear all"
 cancelbtn.style.opacity = "1";
 startbtn.style.visibility = "hidden"
@@ -339,12 +356,43 @@ startbtn.style.transition = "0.3s ease"
 </script>
 
 <style scoped>
+
+.timercirc1{
+  position: absolute;
+  background: rgb(248, 252, 255);
+  top: 40%;
+  left: 50%;
+  border-radius: 50%;
+  width: 235px;
+  height: 235px;
+  z-index: +10;
+  box-shadow: 0px 0px 10px 1px rgb(158, 219, 255);
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+  visibility: hidden;
+}
+
+.timercirc2{
+  position: absolute;
+  width: 275px;
+  height: 275px;
+  top: 40%;
+  left: 50%;
+  box-shadow: inset 0px 0px 60px 35px rgba(187, 226, 241, 0.3), 0px 0px 5px 0px rgb(158, 219, 255);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+  visibility: hidden;
+}
+
+
+
 .base-timer {
   position: relative;
-  width: 253px;
-  height: 253px;
+  width: 0px;
+  height: 0px;
   left: 50%;
-  top: 40%;
+  top: 00%;
   transform: translate(-50%, -50%);
   font-size: 48px;
   color: black;
@@ -364,7 +412,7 @@ startbtn.style.transition = "0.3s ease"
     font-size: 48px;
     visibility: hidden;
      position: absolute;
-      top: 150%;
+      top: 00%;
   }
 
   .base-timer__path-elapsed{
@@ -373,7 +421,7 @@ startbtn.style.transition = "0.3s ease"
     opacity: 0;
     font-size: 48px;
     position: absolute;
-    top: 150%;
+    top: 00%;
     
   }
 
@@ -387,7 +435,8 @@ startbtn.style.transition = "0.3s ease"
    visibility: hidden;
    font-size: 48px;
      position: absolute;
-      top: 103.2%;
+      top: 0.2%;
+      
 
   }
 
@@ -396,13 +445,15 @@ startbtn.style.transition = "0.3s ease"
     font-size: 48px;
     visibility: hidden;
      position: absolute;
-      top: 103.2%;
-
+      top: 108%;
+      width: 342px;
+      left: 4.9%;
   }
+
 
 .base-timer__label{
   position: absolute;
-top: 153%;
+top: 152%;
   left: 50%;
   transform: translate(-50%, -50%);
 font-family: 'Rubik', sans-serif;
@@ -418,16 +469,16 @@ font-family: 'Rubik', sans-serif;
   height: 52px;
   width: 52px;
     position: absolute;
-  top: 40%;
+  top: 110%;
   left: 67%;
   transform: translate(-50%, -50%);
   font-size: 40px;
   border: none;
   color: rgb(77, 77, 77);
-
+z-index: +500;
 font-family: 'Rubik', sans-serif;
-z-index: +20;
-visibility: hidden;
+background: none;
+
 
 }
 
@@ -435,16 +486,16 @@ visibility: hidden;
   height: 52px;
   width: 52px;
     position: absolute;
-  top: 40%;
+  top: 110%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 40px;
   border: none;
   color: rgb(77, 77, 77);
-
+background: none;
 font-family: 'Rubik', sans-serif;
-z-index: +22;
-visibility: hidden;
+z-index: +500;
+
 
 }
 
@@ -452,58 +503,58 @@ visibility: hidden;
   height: 52px;
   width: 52px;
     position: absolute;
-  top: 40%;
+  top: 110%;
   left: 33%;
   transform: translate(-50%, -50%);
   font-size: 40px;
 /*font-size: 46px*/
   border: none;
   color: rgb(77, 77, 77);
-
+z-index: +500;
 font-family: 'Rubik', sans-serif;
-z-index: +20;
-visibility: hidden;
+background: none;
+
 
 }
 
 .startbtn{
-   height: 55px;
-  width: 118px;
+   height: 75px;
+  width: 75px;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
   /*top: 85%;*/
-  top: 60%;
+  top: 110%;
   left: 50%;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(152, 163, 187);
-  visibility: hidden;
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.582);
+  visibility: visible;
   opacity: 0;
 }
 
 .start{
-  margin: 0;
+ margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  top: 54%;
+  left: 54%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 25px;
  letter-spacing: 1px;
 }
 
 .pausebtn{
-  height: 55px;
-  width: 118px;
+   height: 70px;
+  width: 70px;
   border-radius: 500px;
    position: absolute;
     transform: translate(-50%, -50%);
     top: 85%;
   left: 50%;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(152, 163, 187);
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.568);
   visibility: hidden;
   opacity: 0;
 }
@@ -512,66 +563,66 @@ position: absolute;
     margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
+  top: 55%;
   left: 50%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 30px;
  letter-spacing: 1px;
 }
 
 .resumebtn{
-  height: 55px;
-  width: 118px;
+ height: 70px;
+  width: 70px;
   border-radius: 500px;
    position: absolute;
     transform: translate(-50%, -50%);
     top: 85%;
   left: 28%;
-  background-color: rgb(131, 99, 245); 
-  box-shadow:  1px 2px 8px 0px rgb(152, 163, 187);
+    background: rgb(111, 178, 255);
+  box-shadow:  0px 0px 10px 1px rgba(58, 150, 255, 0.589);
   visibility: hidden;
   opacity: 0;
 }
 
 .resume{
-    margin: 0;
+   margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+  top: 54%;
+  left: 54%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 25px;
  letter-spacing: 1px;
 }
 
 .cancelbtn{
-  height: 55px;
-  width: 118px;
+    height: 70px;
+  width: 70px;
   border-radius: 500px;
    position: absolute;
     transform: translate(-50%, -50%);
     top: 85%;
   left: 50%;
   background-color: rgba(255, 0, 0, 0.541); 
-  box-shadow:  1px 2px 4px 0px rgb(187, 127, 127);
+  box-shadow:  0px 0px 4px 0px rgb(187, 127, 127);
   visibility: hidden;
   opacity: 0;
 }
 
 .cancel{
-    margin: 0;
+margin: 0;
 position: absolute;
     transform: translate(-50%, -50%);
-  top: 50%;
+  top: 56%;
   left: 50%;
  font-family: 'Roboto', sans-serif;
  color: white;
  font-weight: 400;
- font-size: 20px;
+ font-size: 30px;
  letter-spacing: 1px;
 }
 

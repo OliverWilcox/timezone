@@ -62,7 +62,7 @@
 
                    
                    
-      <div class="clock" id="clock">
+      <div class="clock" id="clock" v-bind:class="{'clockOff':isClockOff}">
         <div class="clockmincirc">
           
 
@@ -85,9 +85,9 @@
         </div>
       </div>
       <div class="name">
-      <div class="city">Brighton</div>
-      <div class="country">United Kingdom</div>
-      <div class="time">17:15</div>
+      <div class="city">{{city}}</div>
+      <div class="country">{{ country }}</div>
+      <div class="time">{{time}}</div>
     </div>
 
     <div class="switch">
@@ -117,7 +117,7 @@
 </div>
 
 <input type="text" 
-  class="search-bar" 
+  class="search-bar" v-bind:class="{'searchOn':isSearchOn}"
   placeholder="Search..."
   v-model="query"
   @keydown.enter="fetchTime(), changeTime()"
@@ -165,13 +165,21 @@ created(){
 
 data(){
 return{
-
-      query: '',
-    loaded: false
+    query: '',
+    loaded: false,
+    city: '',
+    country: '',
+    time: '',
+    clock: '', 
+    searchBar: '',
+    isClockOff: false,
+    isSearchOn: false,
 }
 },
   
   mounted(){
+
+   
 //this.interval = setInterval(() => this.ClockWork(), 1000);
   },
 
@@ -182,16 +190,17 @@ return{
 
 
     fetchTime () {
+      let _this = this;
 fetch(`http://api.timezonedb.com/v2.1/get-time-zone?key=WPNJI5WCV526&format=json&by=zone&zone=${this.query}`)
 .then(res => res.json())
 .then(function(data){
   console.log(data)
  
 
- let countryname = document.querySelector(".country");
-let timename = document.querySelector(".time")
+ 
+
 let timestamp = data.timestamp
-let country = data.countryName
+let countryname = data.countryName
   const deg = 6;
   const hr = document.querySelector("#hr");
   const mn = document.querySelector("#mn");
@@ -204,7 +213,7 @@ var minutes = "0" + date.getMinutes();
 //var seconds = "0" + date.getSeconds();
 
 // Will display time in 10:30:23 format
-var formattedTime = hours + ':' + minutes.substr(-2)
+let formattedTime = hours + ':' + minutes.substr(-2)
 
 let hh = hours * 30;
     let mm = date.getMinutes() * deg;
@@ -212,9 +221,10 @@ let hh = hours * 30;
 
 hr.style.transform = `rotateZ(${(hh)+(mm/12)}deg)`;
 mn.style.transform = `rotateZ(${mm}deg)`;
-timename.innerHTML = formattedTime
-countryname.innerHTML = country
- 
+
+
+_this.time = formattedTime
+ _this.country = countryname
 
 })
 
@@ -227,27 +237,22 @@ let country = document.querySelector(".country")
 let city = document.querySelector(".city")
 let time = document.querySelector(".time")
 let menu = document.querySelector(".menu");
-let searchBar = document.querySelector(".search-bar");
+
 let searchBtn = document.querySelector(".savedclock");
 clockuiChildren[2].style.top = "-40%";
-clockuiChildren[3].style.top = "-40%";
+this.isClockOff = true;
 menu.style.top = "-30%";
-
+this.isSearchOn = true;
 searchBtn.style.top = "120%";
-searchBar.style.top = "7%";
-searchBar.style.visibility = "visible";
-searchBar.style.opacity = "1";
 country.style.top = "-30%";
 city.style.top = "-30%";
 time.style.top = "-30%";
-
 clockuiChildren[2].style.transition = "0.4s";
-clockuiChildren[3].style.transition = "0.4s";
 country.style.transition = "0.4s";
 city.style.transition = "0.4s";
 time.style.transition = "0.4s";
 menu.style.transition = "0.4s";
-searchBar.style.transition = "0.4s";
+
 searchBtn.style.transition = "0.4s";
 
 
@@ -282,16 +287,15 @@ let country = document.querySelector(".country")
 let city = document.querySelector(".city")
 let time = document.querySelector(".time")
 let menu = document.querySelector(".menu");
-let searchBar = document.querySelector(".search-bar");
+
 let searchBtn = document.querySelector(".savedclock");
 clockuiChildren[2].style.top = "31%";
 clockuiChildren[3].style.top = "31%";
 menu.style.top = "5%";
-
+this.isSearchOn = false;
+this.isClockOff = false;
 searchBtn.style.top = "85%";
-searchBar.style.top = "50%";
-searchBar.style.visibility = "hidden";
-searchBar.style.opacity = "0";
+
 country.style.top = "58%";
 city.style.top = "54%";
 time.style.top = "62.5%";
@@ -302,7 +306,7 @@ country.style.transition = "0.4s";
 city.style.transition = "0.4s";
 time.style.transition = "0.4s";
 menu.style.transition = "0.4s";
-searchBar.style.transition = "0.4s";
+
 searchBtn.style.transition = "0.4s";
 }
 
@@ -360,7 +364,12 @@ z-index: +1;
 
   box-shadow:  1px 1px 20px 5px rgb(188, 219, 252),
    0px 0px 30px 5px rgb(253, 253, 253);
+   transition: 0.4s;
 
+  }
+
+  .clockOff{
+    top: -40%;
   }
   
 .search-bar{
@@ -369,10 +378,10 @@ z-index: +1;
   width: 80%;
   height: 36px;
   padding: 8px;
-  opacity: 0;
-  visibility: hidden;
+visibility: hidden;
+opacity: 0;
+top: 50%;
   transform:translate(-50%, -50%);
-  top: 50%;
   left: 50%;
   z-index: +30;
   color: #ffffff;
@@ -381,7 +390,6 @@ z-index: +1;
   outline: none;
 box-shadow:  -7px 7px 10px 3px rgba(109, 165, 224, 0.171),
    0px 1px 10px 1px rgba(157, 204, 255, 0.11);
-  background: none;
 border: none;
 border-radius: 5px;
 background: rgb(234,244,255);
@@ -397,9 +405,16 @@ background: linear-gradient(330deg, rgba(234,244,255,1) 0%, rgba(215,235,255,1) 
 }
 
 .search-bar:focus{
-  top: 50px;
+  
   margin-top: 25px;
 
+}
+
+.searchOn{
+  top: 7%;
+  visibility: visible;
+  opacity: 1;
+   transition: 0.4s;
 }
 
   

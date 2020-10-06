@@ -50,6 +50,13 @@ export default {
   props: {
 
   },
+
+  data(){
+    return{
+     isTest: "hello"
+    }
+  },
+
 methods: {
   addclock(){
   const box = document.querySelector('.boxcont')

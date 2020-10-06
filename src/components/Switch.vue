@@ -1,6 +1,7 @@
 <template>
-<div class="menu" v-bind:class="{'clockOff':isClockOff}">
-   <div class="worldclick">Clock</div>
+<div class="menu" v-bind:class="{'menuOff':isClockOff}">
+    
+   <div class="worldclick"></div>
    <div class="alarmclick">Alarm</div>
    <div class="timerclick">Timer</div>
     <div class="stopwatchclick">Stopwatch</div>
@@ -19,10 +20,11 @@
 
 export default {
     props: {
-        isClockOff: Boolean
-    },
+        isClockOff:{
+         type: Boolean,
+         required: true,
+        }
 
-    data(){
 
     },
     
@@ -583,6 +585,10 @@ line-height: 62px;
     z-index: +10000;
 }
 
+.menuOff{
+    top: -40%;
+}
+
 
 
 .worldclick{
@@ -629,6 +635,7 @@ position: absolute;
   
     font-family: 'Roboto', sans-serif;
 }
+
 
 
 </style>

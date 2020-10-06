@@ -77,8 +77,8 @@
       </div>
       <div class="name">
       <div class="city">{{city}}</div>
-      <div class="country" v-bind:class="{'clockOff':isClockOff}">{{ country }}</div>
-      <div class="time" v-bind:class="{'clockOff':isClockOff}">{{time}}</div>
+      <div class="country" v-bind:class="{'countryOff':isClockOff}">{{ country }}</div>
+      <div class="time" v-bind:class="{'timeOff':isClockOff}">{{time}}</div>
     </div>
 
     <div class="switch">
@@ -159,14 +159,11 @@ data(){
 return{
     query: '',
     loaded: false,
-    city: '',
-    country: '',
-    time: '',
-    clock: '', 
     searchBar: '',
     isClockOff: false,
     isAddOff: false,
     isSearchOn: false,
+    
 }
 },
   
@@ -251,9 +248,6 @@ ClockWork(){
 changeTime(){
   this.interval = setInterval(() => this.fetchTime(), 60000);
   this.interval = clearInterval(() => this.ClockWork(), 1000);
-let menu = document.querySelector(".menu");
-menu.style.top = "5%";
-menu.style.transition = "0.4s";
 this.isClockOff = false;
 this.isAddOff = false;
 this.isSearchOn = false;
@@ -850,6 +844,10 @@ visibility: hidden;
                 color: rgb(58, 73, 77);
                 font-weight: 600;
                 transition: 0.4s;
+  }
+
+  .countryOff{
+    top: -40%;
   }
 
    .time{

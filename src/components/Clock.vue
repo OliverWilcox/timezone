@@ -5,7 +5,7 @@
            <Timer/>
 
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
-                   <div class="clockcirc">
+                   <div class="clockcirc" v-bind:class="{'clockcircOff':isClockOff}">
                      <div class="numsthree">
                        <div class="num a"></div>
   <div class="num b"></div>
@@ -31,7 +31,7 @@
            <div class="num v"></div>
            <div class="num w"></div>
            <div class="num x"></div>
-           <div class="num y"></div>
+<div class="num y"></div>
   </div>
 
 <div class="nums">
@@ -49,15 +49,6 @@
   <div class="nu l"></div>
   
 </div>
-
-
-
-
- 
- 
-
-
-
                    </div>
 
                    
@@ -86,8 +77,8 @@
       </div>
       <div class="name">
       <div class="city">{{city}}</div>
-      <div class="country">{{ country }}</div>
-      <div class="time">{{time}}</div>
+      <div class="country" v-bind:class="{'clockOff':isClockOff}">{{ country }}</div>
+      <div class="time" v-bind:class="{'clockOff':isClockOff}">{{time}}</div>
     </div>
 
     <div class="switch">
@@ -112,7 +103,7 @@
   </div>
 </div>
 </div>
-<div class="savedclock" v-on:click="Search()">
+<div class="savedclock" v-on:click="Search()" v-bind:class="{'addbtnOff':isAddOff}">
   <div class="searchbtn"><ion-icon name="add-outline"></ion-icon></div>
 </div>
 
@@ -163,6 +154,7 @@ created(){
  
 },
 
+
 data(){
 return{
     query: '',
@@ -173,6 +165,7 @@ return{
     clock: '', 
     searchBar: '',
     isClockOff: false,
+    isAddOff: false,
     isSearchOn: false,
 }
 },
@@ -231,32 +224,10 @@ _this.time = formattedTime
   },
     
     Search(){
-let clockui = document.querySelector('.clockui')
-let clockuiChildren = clockui.children;
-let country = document.querySelector(".country")
-let city = document.querySelector(".city")
-let time = document.querySelector(".time")
-let menu = document.querySelector(".menu");
 
-let searchBtn = document.querySelector(".savedclock");
-clockuiChildren[2].style.top = "-40%";
 this.isClockOff = true;
-menu.style.top = "-30%";
+this.isAddOff = true;
 this.isSearchOn = true;
-searchBtn.style.top = "120%";
-country.style.top = "-30%";
-city.style.top = "-30%";
-time.style.top = "-30%";
-clockuiChildren[2].style.transition = "0.4s";
-country.style.transition = "0.4s";
-city.style.transition = "0.4s";
-time.style.transition = "0.4s";
-menu.style.transition = "0.4s";
-
-searchBtn.style.transition = "0.4s";
-
-
-
     },
 
 
@@ -280,34 +251,13 @@ ClockWork(){
 changeTime(){
   this.interval = setInterval(() => this.fetchTime(), 60000);
   this.interval = clearInterval(() => this.ClockWork(), 1000);
-
-  let clockui = document.querySelector('.clockui')
-let clockuiChildren = clockui.children;
-let country = document.querySelector(".country")
-let city = document.querySelector(".city")
-let time = document.querySelector(".time")
 let menu = document.querySelector(".menu");
-
-let searchBtn = document.querySelector(".savedclock");
-clockuiChildren[2].style.top = "31%";
-clockuiChildren[3].style.top = "31%";
 menu.style.top = "5%";
-this.isSearchOn = false;
-this.isClockOff = false;
-searchBtn.style.top = "85%";
-
-country.style.top = "58%";
-city.style.top = "54%";
-time.style.top = "62.5%";
-
-clockuiChildren[2].style.transition = "0.4s";
-clockuiChildren[3].style.transition = "0.4s";
-country.style.transition = "0.4s";
-city.style.transition = "0.4s";
-time.style.transition = "0.4s";
 menu.style.transition = "0.4s";
+this.isClockOff = false;
+this.isAddOff = false;
+this.isSearchOn = false;
 
-searchBtn.style.transition = "0.4s";
 }
 
   }
@@ -715,9 +665,13 @@ visibility: hidden;
   box-shadow:  7px 2px 10px 5px rgb(221, 237, 254),
    15px 15px 40px 10px inset 	rgb(223, 239, 255),
     -5px 0px 10px 4px rgb(255, 255, 255); 
+    transition: 0.4s;
   
   }
   
+  .clockcircOff{
+    top: -40%;
+  }
   
   
   
@@ -879,21 +833,10 @@ visibility: hidden;
         font-family: 'Open Sans', sans-serif;
         font-size: 18px;
         color: rgb(151, 164, 165);
+        transition: 0.4s;
   }
 
-  .cityname{
-    left: 50%;
-    top: 62.5%;
-    position: absolute;
-        transform: translate(-50%, -50%);
-                font-family: 'Open Sans', sans-serif;
-                font-weight: 400;
-                font-size: 24px;
-                white-space: nowrap;
-                color: rgb(58, 73, 77);
-                font-weight: 600;
-                z-index: +30;
-  }
+
 
    .country{
     left: 50%;
@@ -906,6 +849,7 @@ visibility: hidden;
                 white-space: nowrap;
                 color: rgb(58, 73, 77);
                 font-weight: 600;
+                transition: 0.4s;
   }
 
    .time{
@@ -919,6 +863,7 @@ visibility: hidden;
                 white-space: nowrap;
                 color: rgb(58, 73, 77);
                 font-weight: 600;
+                transition: 0.4s;
   }
 
   
@@ -931,13 +876,17 @@ visibility: hidden;
   border-radius: 500px;
     position: absolute;
     transform: translate(-50%, -50%);
-
   top: 85%;
   left: 50%;
   z-index: 10;
     background: #93c4ff;
   box-shadow:  0px 0px 30px 2px #83b4f5;
   opacity: 1;
+  transition: 0.4s;
+}
+
+.addbtnOff{
+  top: 140%;
 }
 
 .searchbtn{

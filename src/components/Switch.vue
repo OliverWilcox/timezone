@@ -1,5 +1,5 @@
 <template>
-<div class="menu">
+<div class="menu" v-bind:class="{'clockOff':isClockOff}">
    <div class="worldclick">Clock</div>
    <div class="alarmclick">Alarm</div>
    <div class="timerclick">Timer</div>
@@ -18,6 +18,13 @@
 <script>
 
 export default {
+    props: {
+        isClockOff: Boolean
+    },
+
+    data(){
+
+    },
     
     mounted(){
  
@@ -85,7 +92,7 @@ clockuiChildren[8].style.transition = "none";
 
 
         },
-        clockOff(){
+        clockOfff(){
 let clockui = document.querySelector('.clockui')
 let clockuiChildren = clockui.children;
 let num = document.querySelectorAll('.num');
@@ -455,7 +462,6 @@ stopbtn.style.transition = '0.2s';
 cnclbtn.style.transition = '0.2s';
 },
 time(){
-
 this.timerOn();
 this.clockOff();
 this.alarmOff();
@@ -483,7 +489,6 @@ this.timerOff();
 
         }
 },
-props: ['test']
 }
 </script>
 
@@ -577,6 +582,8 @@ line-height: 62px;
     transform: translate(-50%, -50%);
     z-index: +10000;
 }
+
+
 
 .worldclick{
 font-size: 13px;

@@ -116,6 +116,7 @@
   placeholder="Search..."
   v-model="query"
   @keydown.enter="fetchTime(), changeTime()"
+   @keyup.enter="fetchTime(), changeTime()"
   /> 
 
   <div class="cityname"></div>

@@ -117,7 +117,9 @@
   v-model="query"
   @keydown.enter="fetchTime(), changeTime()"
    @keyup.enter="fetchTime(), changeTime()"
+ 
   /> 
+   <div class="enter-btn" v-on:click="fetchTime(), changeTime()" v-bind:class="{'searchOn':isSearchOn}">enter</div>
 
   <div class="cityname"></div>
 
@@ -355,6 +357,34 @@ background: linear-gradient(330deg, rgba(234,244,255,1) 0%, rgba(215,235,255,1) 
 transition: 0.4s;
 box-shadow: 0px, 0px, 0px, 16px rgba(0, 0, 0, 0.25);
 }
+.enter-btn{
+    font-family: 'Open Sans', sans-serif;
+position: absolute;
+display: block;
+text-align: center;
+
+width: 100px;
+height: 36px;
+padding: 8px;
+visibility: hidden;
+opacity: 0;
+top: 50%;
+transform:translate(-50%, -50%);
+right: -20px;
+z-index: +35;
+color: #ffffff;
+font-size: 24px;
+appearance: none;
+outline: none;
+box-shadow:  -7px 7px 10px 3px rgba(109, 165, 224, 0.171),
+0px 1px 10px 1px rgba(157, 204, 255, 0.11);
+border: none;
+border-radius: 5px;
+background: rgb(234,244,255);
+background: linear-gradient(330deg, rgb(195, 222, 252) 0%, rrgb(162, 209, 255)100%);
+transition: 0.4s;
+box-shadow: 0px, 0px, 0px, 16px rgba(0, 0, 0, 0.25);
+}
 .search-bar::placeholder{
   color: rgb(255, 255, 255);
   opacity: 1;
@@ -363,11 +393,17 @@ box-shadow: 0px, 0px, 0px, 16px rgba(0, 0, 0, 0.25);
 .search-bar:focus{ 
 margin-top: 25px;
 }
+.search-bar:focus .enter-btn{
+  margin-top: 25px;
+}
 .searchOn{
 top: 7%;
 visibility: visible;
 opacity: 1;
 transition: 0.4s;
+}
+.enter-btn.searchOn{
+  top: 20%;
 }
 .clock2{
 top: 21.6%;

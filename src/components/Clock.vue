@@ -107,7 +107,7 @@
   <div class="searchbtn"><ion-icon name="add-outline"></ion-icon></div>
 </div>
 <div class="tutorial" v-bind:class="{'tutorialOn':isSearchOn}">
-  <h3 class="howto">Search by Continent/Capital</h3>
+  <h3 class="howto">Search by Continent/Capital<br>(not working on host, video on case study)</h3>
   <h3 class="examples">Examples<br>Europe/London<br>Asia/Shanghai<br>America/Toronto</h3>
 </div>
 
